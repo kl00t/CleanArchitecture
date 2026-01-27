@@ -14,7 +14,8 @@ public class WidgetRepository(AppDbContext dbContext) : IWidgetRepository
 
     public async Task<WidgetEntity> GetWidgetByIdAsync(Guid id)
     {
-        return await dbContext.Widgets.FirstOrDefaultAsync(x => x.Id == id);
+        var widget = await dbContext.Widgets.FirstOrDefaultAsync(x => x.Id == id);
+        return widget is null ? throw new InvalidOperationException($"Widget with id {id} not found.") : widget;
     }
 
     public async Task<WidgetEntity> AddWidgetAsync(WidgetEntity entity)
